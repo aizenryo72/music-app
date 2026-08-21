@@ -211,9 +211,9 @@
     <span><i class="fa-solid fa-arrow-up"></i><i class="fa-solid fa-arrow-down"></i> songs</span>
   </footer>
 
-  <div class="overlay loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+  <div class="overlay loading-overlay hidden" id="loadingOverlay"><div class="spinner"></div></div>
 
-  <div class="overlay tap-overlay hidden" id="tapOverlay">
+  <div class="overlay tap-overlay" id="tapOverlay">
     <div class="tap-card">
       <div class="tap-icon"><i class="fa-solid fa-play"></i></div>
       <p>Tap to sync to IST Mood</p>
@@ -331,8 +331,6 @@
   };
 
   function onPlayerReady(event) {
-      tapOverlay.classList.remove('hidden');
-      loadingOverlay.classList.add('hidden');
       buildCarousel();
       updateBackground();
       loadSong(false);
@@ -402,7 +400,6 @@
     durationEl.textContent = '0:00';
 
     if (ytPlayer && ytPlayer.loadVideoById) {
-        if (hasInteracted) loadingOverlay.classList.remove('hidden');
         if (autoplay && hasInteracted) {
             ytPlayer.loadVideoById(song.ytid);
         } else {
@@ -444,15 +441,19 @@
   function unlockAndPlay(){
     hasInteracted = true;
     tapOverlay.classList.add('hidden');
-    loadingOverlay.classList.remove('hidden');
     
     const correctMood = autoSelectMoodIndex();
     if(plIndex !== correctMood) {
-        let diff = correctMood - plIndex;
-        changePlaylist(diff);
+        plIndex = correctMood;
+        trackPos = plIndex + 1;
+        setTrack(false);
+        updateBackground();
+        updateDots();
     }
     
-    ytPlayer.playVideo();
+    loadingOverlay.classList.remove('hidden');
+    const song = playlists[plIndex].songs[songIndex];
+    ytPlayer.loadVideoById(song.ytid);
   }
 
   function startProgressBar() {
