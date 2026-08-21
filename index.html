@@ -4,27 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-<!-- Primary Meta Tags -->
-<title>Music.app | Stream Infinite Songs</title>
-<meta name="title" content="Music.app | Stream Infinite Songs & Free Music Streaming">
-<meta name="description" content="Experience Music.app, an unlimited music player. Stream infinite songs, enjoy free music streaming with our custom YouTube web player and stunning UI.">
-<meta name="keywords" content="music.app, unlimited music player, stream infinite songs, youtube web player, free music streaming, custom youtube player, online audio player, streaming app">
+<!-- Enhanced Primary Meta Tags for SEO -->
+<title>Music.app | 24/7 Smart Mood Radio & Free Streaming</title>
+<meta name="title" content="Music.app | 24/7 Smart Mood Radio & Free Streaming">
+<meta name="description" content="Experience Music.app, an unlimited music player that automatically adapts to your mood based on the time of day. Stream 90s hits, Bhakti, Gen-Z trends, and Lofi music for free.">
+<meta name="keywords" content="music.app, unlimited music player, stream infinite songs, youtube web player, auto mood radio, 90s hits, bhakti songs, sad songs, lofi relax, free music streaming, online audio player">
 <meta name="author" content="Music.app Creator">
 <meta name="robots" content="index, follow">
 
-<!-- Open Graph / Facebook (For link sharing preview) -->
+<!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://aizenryo72.github.io/music-app/"> 
-<meta property="og:title" content="Music.app | Stream Infinite Songs">
-<meta property="og:description" content="Experience Music.app, an unlimited music player. Stream infinite songs and enjoy free music streaming with our custom YouTube web player.">
+<meta property="og:title" content="Music.app | Smart Mood Radio">
+<meta property="og:description" content="Stream infinite songs that adapt to your mood 24/7. Enjoy our custom YouTube-powered web player.">
 <meta property="og:image" content="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1080&auto=format&fit=crop"> 
-
-<!-- Twitter (For Twitter sharing preview) -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://aizenryo72.github.io/music-app/">
-<meta property="twitter:title" content="Music.app | Stream Infinite Songs">
-<meta property="twitter:description" content="Experience Music.app, an unlimited music player. Stream infinite songs and enjoy free music streaming with our custom YouTube web player.">
-<meta property="twitter:image" content="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1080&auto=format&fit=crop">
 
 <!-- FontAwesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -67,19 +60,26 @@
   .bg-layer.a{z-index:1;}
   .bg-layer.b{z-index:2;opacity:0;}
   .bg-layer.top{opacity:1 !important;}
-
   .grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* ---------- header ---------- */
+  /* ---------- header & live viewer ---------- */
   .topbar{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;
     padding:max(18px,env(safe-area-inset-top)) 22px 6px;}
   .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+  
+  .live-badge {
+    background: rgba(255, 40, 80, 0.2); border: 1px solid rgba(255, 40, 80, 0.4);
+    color: #ff4d6d; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold;
+    display: flex; align-items: center; gap: 5px; cursor: pointer; transition: opacity 0.3s ease;
+  }
+  .live-badge i { font-size: 8px; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .live-badge.hidden { display: none !important; }
+
   .icon-btn{width:38px;height:38px;border-radius:50%;background:var(--glass);display:flex;align-items:center;justify-content:center;
     font-size:14px;transition:background .2s ease,transform .2s ease;}
-  .icon-btn:hover{background:var(--glass-strong);}
-  .icon-btn:active{transform:scale(.9);}
 
   /* ---------- playlist carousel ---------- */
   .playlist-indicator{position:relative;z-index:5;padding:2px 0 4px;}
@@ -95,28 +95,22 @@
   /* ---------- stage ---------- */
   .stage{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:26px;padding:10px 30px;min-height:0;touch-action:none;}
-
   .disc-wrap{position:relative;width:min(58vw,240px);height:min(58vw,240px);display:flex;align-items:center;justify-content:center;}
   .disc-wrap::before{
     content:"";position:absolute;inset:-18%;border-radius:50%;
-    background:radial-gradient(circle,var(--accent) 0%,transparent 68%);
-    opacity:.35;filter:blur(18px);
-    transition:background .6s ease;
+    background:radial-gradient(circle,var(--accent) 0%,transparent 68%); opacity:.35;filter:blur(18px); transition:background .6s ease;
   }
   .disc{
     position:relative;width:100%;height:100%;border-radius:50%;
-    background:
-      repeating-radial-gradient(circle at center,rgba(255,255,255,.05) 0 2px,rgba(0,0,0,.12) 2px 4px),
+    background:repeating-radial-gradient(circle at center,rgba(255,255,255,.05) 0 2px,rgba(0,0,0,.12) 2px 4px),
       radial-gradient(circle at 35% 30%,rgba(255,255,255,.18),rgba(0,0,0,.55) 70%);
-    box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.08);
-    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.08); display:flex;align-items:center;justify-content:center;
     animation:spin 9s linear infinite;animation-play-state:paused;
   }
   .disc.spinning{animation-play-state:running;}
   .disc::after{
     content:"";position:absolute;width:34%;height:34%;border-radius:50%;
-    background:var(--accent);box-shadow:inset 0 0 0 6px rgba(11,7,19,.85);
-    transition:background .6s ease;
+    background:var(--accent);box-shadow:inset 0 0 0 6px rgba(11,7,19,.85); transition:background .6s ease;
   }
   .disc-label{position:relative;z-index:2;font-size:15px;line-height:1;transform:translateY(0);}
   @keyframes spin{to{transform:rotate(360deg);}}
@@ -155,7 +149,6 @@
   .overlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
     background:rgba(8,5,15,.72);backdrop-filter:blur(6px);transition:opacity .35s ease,visibility .35s ease;}
   .overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-
   .spinner{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.18);
     border-top-color:var(--accent);animation:rotate 0.85s linear infinite;}
   @keyframes rotate{to{transform:rotate(360deg);}}
@@ -165,20 +158,9 @@
     justify-content:center;font-size:22px;color:#0b0713;animation:pulse 1.8s ease-in-out infinite;}
   .tap-card p{font-size:14px;color:var(--ink-dim);font-weight:600;letter-spacing:.02em;}
   @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(155,107,255,.5);}50%{transform:scale(1.06);box-shadow:0 0 0 14px rgba(155,107,255,0);}}
-
-  @media (prefers-reduced-motion:reduce){
-    .disc{animation:none !important;}
-    .tap-icon{animation:none !important;}
-    .carousel-track{transition:none !important;}
-    .bg-layer{transition:none !important;}
-  }
-
-  @media (min-width:720px){
-    .stage{gap:34px;}
-    .disc-wrap{width:min(30vw,260px);height:min(30vw,260px);}
-    .progress-section,.hint{max-width:520px;margin:0 auto;}
-    .topbar,.playlist-indicator{max-width:520px;margin-left:auto;margin-right:auto;width:100%;}
-  }
+  
+  /* Hidden YouTube Player */
+  #ytplayer-container { display: none; }
 </style>
 </head>
 <body>
@@ -188,7 +170,11 @@
   <div class="grain"></div>
 
   <header class="topbar">
-    <span class="eyebrow">Now Playing</span>
+    <span class="eyebrow" id="adminTrigger">Now Playing</span>
+    <!-- Live Viewer Badge -->
+    <div class="live-badge" id="liveBadge" title="Admin: Double click 'Now Playing' to hide/show">
+        <i class="fa-solid fa-circle"></i> <span id="viewerCount">12</span> Live
+    </div>
     <button class="icon-btn" id="fullscreenBtn" aria-label="Toggle fullscreen"><i class="fa-solid fa-expand"></i></button>
   </header>
 
@@ -234,55 +220,73 @@
   <div class="overlay tap-overlay hidden" id="tapOverlay">
     <div class="tap-card">
       <div class="tap-icon"><i class="fa-solid fa-play"></i></div>
-      <p>Tap to start listening</p>
+      <p>Tap to sync to IST Mood</p>
     </div>
   </div>
 </div>
 
-<audio id="audio" preload="metadata"></audio>
+<!-- Invisible YouTube Player Container -->
+<div id="ytplayer-container">
+    <div id="ytplayer"></div>
+</div>
+
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-(function(){
   "use strict";
 
+  // --- AUTOMATION: 5 Moods based on specific YouTube Video IDs ---
+  // Replace 'ytid' strings with actual YouTube Video IDs you want to play
   const playlists = [
-    { icon:'🌙', name:'Night Drift', colors:['#1a1147','#4a2a7a'], accent:'#9b6bff', songs:[
-      { title:'Hollow Streetlight', artist:'Vella Moon', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-      { title:'Static Lullaby', artist:'Fenn Aurora', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-      { title:'Glass Horizon', artist:'Vella Moon', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' }
+    { id: 'bhakti', icon: '🛕', name: 'Morning Bhakti', colors: ['#ff8c00', '#cc5200'], accent: '#ffcc00', songs:[
+      { title: 'Morning Aarti', artist: 'Divine Chants', ytid: 'c_K5fQ-RjWk' }, // Replace with real ID
+      { title: 'Peaceful Mantra', artist: 'Devotional', ytid: 'T_cZ2r_HhE0' }
     ]},
-    { icon:'🔥', name:'Ember Pulse', colors:['#2b0f0f','#7a2e12'], accent:'#ff7a45', songs:[
-      { title:'Redline', artist:'Coal & Copper', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-      { title:'Ironheart', artist:'Coal & Copper', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
-      { title:'Furnace Run', artist:'Dex Row', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' }
+    { id: '90s', icon: '📼', name: '90s Classics', colors: ['#1a1147', '#4a2a7a'], accent: '#9b6bff', songs:[
+      { title: '90s Romantic Hit', artist: 'Kumar Sanu', ytid: 'W2qWAig-R5w' },
+      { title: 'Melody Gold', artist: 'Udit Narayan', ytid: 'wF_B_aagLfI' }
     ]},
-    { icon:'🌊', name:'Tidal Blue', colors:['#06222b','#0f4c5c'], accent:'#35d1c8', songs:[
-      { title:'Undertow', artist:'Salt Kite', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3' },
-      { title:'Low Tide Radio', artist:'Salt Kite', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' },
-      { title:'Coastal Drift', artist:'Marin Isles', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3' }
+    { id: 'genz', icon: '🚀', name: 'Gen-Z Trending', colors: ['#1a0b2e', '#5c1a63'], accent: '#ff4fd8', songs:[
+      { title: 'Viral Track 1', artist: 'Modern Hits', ytid: 'V0lw3qylVzA' },
+      { title: 'Pop Anthem', artist: 'Gen-Z Vibes', ytid: 'b45X-n6E5eY' }
     ]},
-    { icon:'🍂', name:'Amber Hollow', colors:['#2b1a0d','#6b3e14'], accent:'#e2a24b', songs:[
-      { title:'Porch Light', artist:'Wren & Oak', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3' },
-      { title:'Harvest Static', artist:'Wren & Oak', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3' },
-      { title:'Sunken Barn', artist:'Cade Miller', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3' }
+    { id: 'sad', icon: '🌧️', name: 'Heartbreak & Sad', colors: ['#06222b', '#0f4c5c'], accent: '#35d1c8', songs:[
+      { title: 'Emotional Journey', artist: 'Arijit Singh', ytid: 'HnN2Y1E6zI4' },
+      { title: 'Midnight Tears', artist: 'Sad Lo-Fi', ytid: 'r6-V0yQZpD0' }
     ]},
-    { icon:'🚀', name:'Neon Circuit', colors:['#1a0b2e','#5c1a63'], accent:'#ff4fd8', songs:[
-      { title:'Vector Skyline', artist:'Pixel Fauna', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3' },
-      { title:'Chrome Rain', artist:'Pixel Fauna', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3' },
-      { title:'Arcade Ghost', artist:'8-Bit Mirage', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3' }
+    { id: 'relax', icon: '🌙', name: 'Calm & Relax', colors: ['#2b1a0d', '#6b3e14'], accent: '#e2a24b', songs:[
+      { title: 'Lofi Chill Vibes', artist: 'Lofi Girl', ytid: 'jfKfPfyJRdk' },
+      { title: 'Deep Sleep Ambient', artist: 'Sukoon', ytid: '5qap5aO4i9A' }
     ]}
   ];
 
+  // --- TIME BASED AUTOMATION LOGIC (IST) ---
+  function getISTHour() {
+    const d = new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"});
+    return new Date(d).getHours();
+  }
+
+  function autoSelectMoodIndex() {
+    const h = getISTHour();
+    if(h >= 4 && h < 8) return 0;   // 4 AM to 8 AM - Bhakti
+    if(h >= 8 && h < 16) return 1;  // 8 AM to 4 PM - 90s Classics
+    if(h >= 16 && h < 20) return 2; // 4 PM to 8 PM - GenZ Trending
+    if(h >= 20 && h < 24) return 3; // 8 PM to 12 AM - Sad Songs
+    return 4;                       // 12 AM to 4 AM - Calm & Relax
+  }
+
   const N = playlists.length;
-  let plIndex = 0;        // real playlist index
-  let songIndex = 0;      // real song index within playlist
-  let trackPos = 1;       // carousel track position (1..N, 0 and N+1 are clones)
+  let plIndex = autoSelectMoodIndex(); // Automatically starts on correct mood!
+  let songIndex = 0;      
+  let trackPos = plIndex + 1; // Align Carousel
   let isPlaying = false;
   let hasInteracted = false;
   let bgTop = 'A';
+  let ytPlayer;
+  let progressInterval;
 
   // ---------- element refs ----------
-  const audio = document.getElementById('audio');
   const disc = document.getElementById('disc');
   const discLabel = document.getElementById('discLabel');
   const songTitle = document.getElementById('songTitle');
@@ -302,7 +306,73 @@
   const tapOverlay = document.getElementById('tapOverlay');
   const bgA = document.getElementById('bgA');
   const bgB = document.getElementById('bgB');
-  const stage = document.getElementById('stage');
+
+  // ---------- ADMIN & LIVE COUNTER SIMULATION ----------
+  // Simulate active viewers fluctuating
+  const viewerCountEl = document.getElementById('viewerCount');
+  let viewers = Math.floor(Math.random() * (45 - 12 + 1) + 12);
+  viewerCountEl.innerText = viewers;
+  setInterval(() => {
+      viewers += Math.random() > 0.5 ? 1 : -1;
+      if(viewers < 5) viewers = 5;
+      viewerCountEl.innerText = viewers;
+  }, 10000);
+
+  // Secret Admin Control: Double tap "Now Playing" to hide/show live counter
+  let adminTap = 0;
+  document.getElementById('adminTrigger').addEventListener('click', () => {
+      adminTap++;
+      if(adminTap === 2) {
+          document.getElementById('liveBadge').classList.toggle('hidden');
+          adminTap = 0;
+      }
+      setTimeout(()=> adminTap = 0, 1000);
+  });
+
+  // ---------- YouTube IFrame API Setup ----------
+  window.onYouTubeIframeAPIReady = function() {
+    ytPlayer = new YT.Player('ytplayer', {
+      height: '0', // Invisible
+      width: '0',  // Invisible
+      videoId: '', 
+      playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1, 'fs': 0, 'rel': 0 },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange,
+        'onError': onPlayerError
+      }
+    });
+  };
+
+  function onPlayerReady(event) {
+      tapOverlay.classList.remove('hidden');
+      loadingOverlay.classList.add('hidden');
+      buildCarousel();
+      updateBackground();
+      loadSong(false);
+  }
+
+  function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+          loadingOverlay.classList.add('hidden');
+          setPlaying(true);
+          startProgressBar();
+          durationEl.textContent = formatTime(ytPlayer.getDuration());
+      } else if (event.data === YT.PlayerState.PAUSED) {
+          setPlaying(false);
+          stopProgressBar();
+      } else if (event.data === YT.PlayerState.ENDED) {
+          nextSong();
+      } else if (event.data === YT.PlayerState.BUFFERING) {
+          if(hasInteracted) loadingOverlay.classList.remove('hidden');
+      }
+  }
+
+  function onPlayerError(event) {
+      // Auto-skip unplayable videos
+      console.warn("YouTube Video Error, skipping...");
+      nextSong();
+  }
 
   // ---------- carousel build ----------
   function buildCarousel(){
@@ -311,8 +381,7 @@
       `<div class="carousel-slide"><span class="cs-icon">${pl.icon}</span><span class="cs-name">${pl.name}</span></div>`
     ).join('');
     setTrack(false);
-
-    dotsWrap.innerHTML = playlists.map((_,i)=>`<span class="dot${i===0?' active':''}"></span>`).join('');
+    dotsWrap.innerHTML = playlists.map((_,i)=>`<span class="dot${i===plIndex?' active':''}"></span>`).join('');
   }
   function setTrack(animate){
     carouselTrack.style.transition = animate ? 'transform .45s cubic-bezier(.22,.61,.36,1)' : 'none';
@@ -326,7 +395,6 @@
     [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===plIndex));
   }
 
-  // ---------- background crossfade ----------
   function updateBackground(){
     const pl = playlists[plIndex];
     const grad = `linear-gradient(160deg, ${pl.colors[0]} 0%, ${pl.colors[1]} 100%)`;
@@ -338,7 +406,7 @@
     document.documentElement.style.setProperty('--accent', pl.accent);
   }
 
-  // ---------- song loading ----------
+  // ---------- song loading (YouTube) ----------
   function loadSong(autoplay){
     const pl = playlists[plIndex];
     const song = pl.songs[songIndex];
@@ -350,11 +418,13 @@
     currentTimeEl.textContent = '0:00';
     durationEl.textContent = '0:00';
 
-    if(hasInteracted) loadingOverlay.classList.remove('hidden');
-    audio.src = song.src;
-    audio.load();
-    if(autoplay && hasInteracted){
-      audio.play().catch(()=>{});
+    if (ytPlayer && ytPlayer.loadVideoById) {
+        if (hasInteracted) loadingOverlay.classList.remove('hidden');
+        if (autoplay && hasInteracted) {
+            ytPlayer.loadVideoById(song.ytid);
+        } else {
+            ytPlayer.cueVideoById(song.ytid);
+        }
     }
   }
 
@@ -367,16 +437,16 @@
 
   function togglePlay(){
     if(!hasInteracted) return unlockAndPlay();
-    if(audio.paused){ audio.play().catch(()=>{}); } else { audio.pause(); }
+    if(isPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
   }
 
   function nextSong(){
     songIndex = (songIndex+1) % playlists[plIndex].songs.length;
-    loadSong(isPlaying);
+    loadSong(true);
   }
   function prevSong(){
     songIndex = (songIndex-1+playlists[plIndex].songs.length) % playlists[plIndex].songs.length;
-    loadSong(isPlaying);
+    loadSong(true);
   }
   function changePlaylist(dir){
     trackPos += dir;
@@ -392,40 +462,44 @@
     hasInteracted = true;
     tapOverlay.classList.add('hidden');
     loadingOverlay.classList.remove('hidden');
-    audio.play().then(()=>{
-      loadingOverlay.classList.add('hidden');
-    }).catch(()=>{
-      loadingOverlay.classList.add('hidden');
-    });
+    
+    // Check if IST time dictates a mood jump since page loaded
+    const correctMood = autoSelectMoodIndex();
+    if(plIndex !== correctMood) {
+        let diff = correctMood - plIndex;
+        changePlaylist(diff);
+    }
+    
+    ytPlayer.playVideo();
   }
 
-  // ---------- audio events ----------
-  audio.addEventListener('waiting', ()=>{ if(hasInteracted) loadingOverlay.classList.remove('hidden'); });
-  audio.addEventListener('canplay', ()=>{ loadingOverlay.classList.add('hidden'); });
-  audio.addEventListener('loadedmetadata', ()=>{
-    durationEl.textContent = formatTime(audio.duration);
-    loadingOverlay.classList.add('hidden');
-    if(!hasInteracted) tapOverlay.classList.remove('hidden');
-  });
-  audio.addEventListener('playing', ()=> setPlaying(true));
-  audio.addEventListener('pause', ()=> setPlaying(false));
-  audio.addEventListener('ended', nextSong);
-  audio.addEventListener('timeupdate', ()=>{
-    if(!audio.duration) return;
-    const pct = (audio.currentTime/audio.duration)*100;
-    progressFill.style.width = pct+'%';
-    progressHandle.style.left = pct+'%';
-    currentTimeEl.textContent = formatTime(audio.currentTime);
-  });
+  // ---------- Progress Bar Logic ----------
+  function startProgressBar() {
+      stopProgressBar();
+      progressInterval = setInterval(() => {
+          if(ytPlayer && ytPlayer.getCurrentTime) {
+              const current = ytPlayer.getCurrentTime();
+              const duration = ytPlayer.getDuration();
+              if (duration > 0) {
+                  const pct = (current / duration) * 100;
+                  progressFill.style.width = pct + '%';
+                  progressHandle.style.left = pct + '%';
+                  currentTimeEl.textContent = formatTime(current);
+              }
+          }
+      }, 500);
+  }
+  function stopProgressBar() {
+      clearInterval(progressInterval);
+  }
 
   function formatTime(t){
-    if(!isFinite(t)) return '0:00';
+    if(!isFinite(t) || t === 0) return '0:00';
     const m = Math.floor(t/60);
     const s = Math.floor(t%60).toString().padStart(2,'0');
     return `${m}:${s}`;
   }
 
-  // ---------- controls ----------
   playBtn.addEventListener('click', togglePlay);
   nextBtn.addEventListener('click', nextSong);
   prevBtn.addEventListener('click', prevSong);
@@ -434,14 +508,12 @@
   function seek(clientX){
     const rect = progressBar.getBoundingClientRect();
     const ratio = Math.min(1, Math.max(0, (clientX-rect.left)/rect.width));
-    if(audio.duration) audio.currentTime = ratio*audio.duration;
+    if(ytPlayer && ytPlayer.getDuration) {
+        const duration = ytPlayer.getDuration();
+        ytPlayer.seekTo(ratio * duration, true);
+    }
   }
   progressBar.addEventListener('click', e=> seek(e.clientX));
-  progressBar.addEventListener('keydown', e=>{
-    if(!audio.duration) return;
-    if(e.key==='ArrowRight') audio.currentTime = Math.min(audio.duration, audio.currentTime+5);
-    if(e.key==='ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime-5);
-  });
 
   fullscreenBtn.addEventListener('click', ()=>{
     if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.().catch(()=>{}); }
@@ -452,7 +524,7 @@
       ? '<i class="fa-solid fa-compress"></i>' : '<i class="fa-solid fa-expand"></i>';
   });
 
-  // ---------- swipe (pointer events: works for touch + mouse) ----------
+  // ---------- swipe (pointer events) ----------
   let startX=0, startY=0, tracking=false;
   const THRESH = 46;
 
@@ -464,7 +536,7 @@
     tracking = false;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    if(Math.abs(dx) < 10 && Math.abs(dy) < 10) return; // treat as tap, let click handlers work
+    if(Math.abs(dx) < 10 && Math.abs(dy) < 10) return; 
 
     if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > THRESH){
       changePlaylist(dx < 0 ? 1 : -1);
@@ -473,11 +545,6 @@
     }
   });
 
-  // ---------- init ----------
-  buildCarousel();
-  updateBackground();
-  loadSong(false);
-})();
 </script>
 </body>
 </html>
