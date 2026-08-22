@@ -231,6 +231,10 @@
   "use strict";
 
   // --- API KEY INTEGRATION ---
+  // SECURITY NOTE: this key is exposed to every visitor via "view source".
+  // Restrict it in Google Cloud Console (API restriction: YouTube Data API v3 only;
+  // application restriction: HTTP referrers = your domain), and ideally proxy
+  // requests through a backend instead of calling the API directly from the browser.
   const YT_API_KEY = "AIzaSyA-lhmpTSP5X-gu1c-m0nZCGUhEWyNNfJQ";
 
   // --- 5 Moods with Search Queries for YouTube Data API Automation ---
@@ -441,6 +445,10 @@
 
   function togglePlay(){
     if(!hasInteracted) return unlockAndPlay();
+    if(!ytPlayer || typeof ytPlayer.playVideo !== 'function'){
+        console.warn('YouTube player not ready yet (API may still be loading or blocked by network).');
+        return;
+    }
     if(isPlaying){ ytPlayer.pauseVideo(); } else { ytPlayer.playVideo(); }
   }
 
@@ -480,10 +488,12 @@
     
     loadingOverlay.classList.remove('hidden');
     await fetchSongsForMood(plIndex);
-    const song = playlists[plIndex].songs[songIndex];
-    if (song && song.ytid) {
-        ytPlayer.loadVideoById(song.ytid);
-    }
+    // FIX: reset songIndex (it could be out of range for the new mood's
+    // playlist length) and route through loadSong() so the title/artist/
+    // disc label actually update to match what's playing, instead of
+    // calling ytPlayer.loadVideoById() directly and leaving the UI stale.
+    songIndex = 0;
+    loadSong(true);
   }
 
   function startProgressBar() {
@@ -518,12 +528,11 @@
   tapOverlay.addEventListener('click', unlockAndPlay);
 
   function seek(clientX){
+    if(!ytPlayer || typeof ytPlayer.getDuration !== 'function' || typeof ytPlayer.seekTo !== 'function') return;
     const rect = progressBar.getBoundingClientRect();
     const ratio = Math.min(1, Math.max(0, (clientX-rect.left)/rect.width));
-    if(ytPlayer && ytPlayer.getDuration) {
-        const duration = ytPlayer.getDuration();
-        ytPlayer.seekTo(ratio * duration, true);
-    }
+    const duration = ytPlayer.getDuration();
+    ytPlayer.seekTo(ratio * duration, true);
   }
   progressBar.addEventListener('click', e=> seek(e.clientX));
 
