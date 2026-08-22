@@ -328,6 +328,13 @@
           artist: item.snippet.channelTitle,
           ytid: item.id.videoId
         }));
+      } else if (data.error) {
+        // TEMP DEBUG: surface the real API error on-screen so it's visible
+        // without opening dev tools. Remove this branch once fixed.
+        console.error('YouTube API error:', data.error);
+        playlists[index].songs = [
+          { title: 'API ERROR ' + data.error.code, artist: (data.error.message || '').slice(0,120), ytid: 'jfKfPfyJRdk' }
+        ];
       } else {
         // Fallback if search returns empty
         playlists[index].songs = [
@@ -335,8 +342,10 @@
         ];
       }
     } catch (e) {
+      // TEMP DEBUG: show the fetch/network error itself. Remove once fixed.
+      console.error('Fetch failed:', e);
       playlists[index].songs = [
-        { title: 'Chill Vibes Mix', artist: 'YouTube Audio', ytid: 'jfKfPfyJRdk' }
+        { title: 'NETWORK ERROR', artist: String(e).slice(0,120), ytid: 'jfKfPfyJRdk' }
       ];
     }
     loadingOverlay.classList.add('hidden');
