@@ -6,8 +6,8 @@
 
 <title>Music.app | 24/7 Smart Mood Radio & Free Streaming</title>
 <meta name="title" content="Music.app | 24/7 Smart Mood Radio & Free Streaming">
-<meta name="description" content="Experience Music.app, an unlimited music player that automatically adapts to your mood based on the time of day. Stream 90s hits, Bhakti, Gen-Z trends, and Lofi music for free.">
-<meta name="keywords" content="music.app, unlimited music player, stream infinite songs, youtube web player, auto mood radio, 90s hits, bhakti songs, sad songs, lofi relax, free music streaming, online audio player">
+<meta name="description" content="Experience Music.app, an unlimited music player that automatically adapts to your mood based on the time of day. Stream 90s hits, Bhakti, Gen-Z trends, Bhojpuri and Lofi music for free.">
+<meta name="keywords" content="music.app, unlimited music player, stream infinite songs, youtube web player, auto mood radio, 90s hits, bhakti songs, sad songs, lofi relax, bhojpuri songs, free music streaming, online audio player">
 <meta name="author" content="Music.app Creator">
 <meta name="robots" content="index, follow">
 
@@ -63,10 +63,11 @@
   .topbar{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;
     padding:max(18px,env(safe-area-inset-top)) 22px 6px;}
   .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
-  
+
+  /* Live viewer badge: moved to top-left corner, green "live" theme */
   .live-badge {
-    background: rgba(255, 40, 80, 0.2); border: 1px solid rgba(255, 40, 80, 0.4);
-    color: #ff4d6d; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold;
+    background: rgba(34, 197, 94, 0.18); border: 1px solid rgba(34, 197, 94, 0.45);
+    color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold;
     display: flex; align-items: center; gap: 5px; cursor: pointer; transition: opacity 0.3s ease;
   }
   .live-badge i { font-size: 8px; animation: blink 1.5s infinite; }
@@ -76,13 +77,61 @@
   .icon-btn{width:38px;height:38px;border-radius:50%;background:var(--glass);display:flex;align-items:center;justify-content:center;
     font-size:14px;transition:background .2s ease,transform .2s ease;}
 
+  /* Vertical volume slider, fixed to the left edge of the screen */
+  .volume-wrap{
+    position:fixed;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:15;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    background:var(--glass);
+    padding:14px 10px;
+    border-radius:24px;
+    backdrop-filter:blur(6px);
+  }
+  .volume-wrap i{font-size:13px;color:var(--ink-dim);}
+  .volume-slider-track{
+    width:36px;
+    height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .volume-slider{
+    -webkit-appearance:none;
+    appearance:none;
+    width:120px;
+    height:5px;
+    border-radius:3px;
+    background:rgba(255,255,255,.16);
+    outline:none;
+    transform:rotate(-90deg);
+    accent-color:var(--accent);
+  }
+  .volume-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.4);cursor:pointer;
+  }
+  .volume-slider::-moz-range-thumb{
+    width:14px;height:14px;border-radius:50%;background:#fff;border:none;cursor:pointer;
+  }
+  .volume-slider::-moz-range-track{
+    height:5px;border-radius:3px;background:rgba(255,255,255,.16);
+  }
+
   .playlist-indicator{position:relative;z-index:5;padding:2px 0 4px;}
   .carousel-viewport{overflow:hidden;width:100%;}
   .carousel-track{display:flex;will-change:transform;}
   .carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 0;}
   .cs-icon{font-size:20px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));}
-  .cs-name{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--ink);}
-  .dots{display:flex;justify-content:center;gap:6px;margin-top:2px;}
+  .cs-name{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--ink);text-align:center;}
+  .dots{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:2px;padding:0 20px;}
   .dot{width:5px;height:5px;border-radius:50%;background:var(--ink-faint);transition:all .35s ease;}
   .dot.active{width:16px;border-radius:3px;background:var(--accent);}
 
@@ -167,12 +216,21 @@
   <div class="grain"></div>
 
   <header class="topbar">
-    <span class="eyebrow" id="adminTrigger">Now Playing</span>
     <div class="live-badge" id="liveBadge" title="Admin: Double click 'Now Playing' to hide/show">
         <i class="fa-solid fa-circle"></i> <span id="viewerCount">12</span> Live
     </div>
+    <span class="eyebrow" id="adminTrigger">Now Playing</span>
     <button class="icon-btn" id="fullscreenBtn" aria-label="Toggle fullscreen"><i class="fa-solid fa-expand"></i></button>
   </header>
+
+  <!-- Vertical volume slider, left side -->
+  <div class="volume-wrap" id="volumeWrap">
+    <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+    <div class="volume-slider-track">
+      <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="80" aria-label="Volume" orient="vertical">
+    </div>
+    <span id="volumeValue" style="font-size:10px;color:var(--ink-faint);font-weight:700;">80</span>
+  </div>
 
   <div class="playlist-indicator">
     <div class="carousel-viewport">
@@ -230,20 +288,31 @@
 <script>
   "use strict";
 
-  // --- API KEY INTEGRATION ---
+  // --- API KEY INTEGRATION (unchanged) ---
   // SECURITY NOTE: this key is exposed to every visitor via "view source".
   // Restrict it in Google Cloud Console (API restriction: YouTube Data API v3 only;
   // application restriction: HTTP referrers = your domain), and ideally proxy
   // requests through a backend instead of calling the API directly from the browser.
   const YT_API_KEY = "AIzaSyA-IhmpTSP5X-gu1c-m0nZCGuhEWyNNfJQ";
 
-  // --- 5 Moods with Search Queries for YouTube Data API Automation ---
+  // --- Moods with Search Queries for YouTube Data API Automation ---
+  // First 5 keep their original order/ids so the IST auto-mood mapping below
+  // still lines up exactly as before. New mood types are appended after them
+  // and are reachable by swiping left/right through the carousel.
   const playlists = [
-    { id: 'bhakti', icon: '🛕', name: 'Morning Bhakti', colors: ['#ff8c00', '#cc5200'], accent: '#ffcc00', query: 'morning bhakti devotional songs audio jukebox', songs: [] },
+    { id: 'bhakti', icon: '🛕', name: 'Morning Bhakti', colors: ['#ff8c00', '#cc5200'], accent: '#ffcc00', query: 'morning bhakti devotional song audio', songs: [] },
     { id: '90s', icon: '📼', name: '90s Classics', colors: ['#1a1147', '#4a2a7a'], accent: '#9b6bff', query: '90s hit romantic songs hindi kumar sanu', songs: [] },
     { id: 'genz', icon: '🚀', name: 'Gen-Z Trending', colors: ['#1a0b2e', '#5c1a63'], accent: '#ff4fd8', query: 'gen z viral pop hits hindi trending songs', songs: [] },
     { id: 'sad', icon: '🌧️', name: 'Heartbreak & Sad', colors: ['#06222b', '#0f4c5c'], accent: '#35d1c8', query: 'sad lofi songs hindi heartbreak arijit singh', songs: [] },
-    { id: 'relax', icon: '🌙', name: 'Calm & Relax', colors: ['#2b1a0d', '#6b3e14'], accent: '#e2a24b', query: 'calm relax lofi ambient sleep music chill', songs: [] }
+    { id: 'relax', icon: '🌙', name: 'Calm & Relax', colors: ['#2b1a0d', '#6b3e14'], accent: '#e2a24b', query: 'calm relax lofi ambient sleep music chill', songs: [] },
+
+    // --- Newly added mood types (Bhojpuri + more), swipe to explore ---
+    { id: 'bhojpuri-sad', icon: '😢', name: 'Bhojpuri Sad (Dukh Bhare Geet)', colors: ['#2b0f0f', '#5c1f1f'], accent: '#ff6b6b', query: 'bhojpuri sad song audio', songs: [] },
+    { id: 'bhojpuri-bhakti', icon: '🙏', name: 'Bhojpuri Bhakti (Bhajan)', colors: ['#3a2a05', '#7a5a12'], accent: '#ffb703', query: 'bhojpuri bhakti bhajan devotional song audio', songs: [] },
+    { id: 'bhojpuri-chill', icon: '🎻', name: 'Bhojpuri Chill Lokgeet', colors: ['#0d2b22', '#155e4f'], accent: '#4dd0a7', query: 'bhojpuri lokgeet chill song audio', songs: [] },
+    { id: 'bhojpuri-orchestra', icon: '🎺', name: 'Bhojpuri Orchestra (Baja Party)', colors: ['#241a3a', '#4b3178'], accent: '#b48bff', query: 'bhojpuri orchestra dance song audio', songs: [] },
+    { id: 'punjabi-party', icon: '🎉', name: 'Punjabi Party', colors: ['#2b1400', '#7a3b00'], accent: '#ffa93b', query: 'punjabi party dance songs audio', songs: [] },
+    { id: 'chill-orchestra', icon: '🎼', name: 'Chill Orchestral', colors: ['#0a1a2b', '#1c3f63'], accent: '#7ec8ff', query: 'chill instrumental orchestral music', songs: [] }
   ];
 
   function getISTHour() {
@@ -251,6 +320,8 @@
     return new Date(d).getHours();
   }
 
+  // Auto-mood mapping is unchanged: still picks one of the original 5 moods
+  // based on time of day. New mood types are opt-in via swipe.
   function autoSelectMoodIndex() {
     const h = getISTHour();
     if(h >= 4 && h < 8) return 0;   
@@ -258,6 +329,13 @@
     if(h >= 16 && h < 20) return 2; 
     if(h >= 20 && h < 24) return 3; 
     return 4;                       
+  }
+
+  // Pick a random song index each time a mood is loaded, so refreshing the
+  // page / revisiting / switching moods doesn't always play the same track.
+  function pickRandomIndex(len) {
+    if (!len || len <= 1) return 0;
+    return Math.floor(Math.random() * len);
   }
 
   const N = playlists.length;
@@ -270,6 +348,7 @@
   let ytPlayer;
   let progressInterval;
   let apiLoaded = false;
+  let lastTapTime = 0; // used for double-tap-to-play/pause detection
 
   const disc = document.getElementById('disc');
   const discLabel = document.getElementById('discLabel');
@@ -290,6 +369,9 @@
   const tapOverlay = document.getElementById('tapOverlay');
   const bgA = document.getElementById('bgA');
   const bgB = document.getElementById('bgB');
+  const volumeSlider = document.getElementById('volumeSlider');
+  const volumeValue = document.getElementById('volumeValue');
+  const volumeIcon = document.getElementById('volumeIcon');
 
   // Live Counter Simulation
   const viewerCountEl = document.getElementById('viewerCount');
@@ -312,12 +394,31 @@
       setTimeout(()=> adminTap = 0, 1000);
   });
 
-  // --- AUTOMATION: FETCH SONGS USING YOUTUBE DATA API ---
+  // --- Volume slider wiring ---
+  function updateVolumeIcon(vol) {
+    volumeIcon.className = vol == 0
+      ? 'fa-solid fa-volume-xmark'
+      : vol < 50
+        ? 'fa-solid fa-volume-low'
+        : 'fa-solid fa-volume-high';
+  }
+  volumeSlider.addEventListener('input', (e) => {
+    const vol = Number(e.target.value);
+    volumeValue.textContent = vol;
+    updateVolumeIcon(vol);
+    if (ytPlayer && typeof ytPlayer.setVolume === 'function') {
+      ytPlayer.setVolume(vol);
+    }
+  });
+
+  // --- AUTOMATION: FETCH SONGS USING YOUTUBE DATA API (same endpoint/key) ---
   async function fetchSongsForMood(index) {
     if (playlists[index].songs.length > 0) return; // already fetched
     loadingOverlay.classList.remove('hidden');
     const query = encodeURIComponent(playlists[index].query);
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${query}&type=video&videoEmbeddable=true&key=${YT_API_KEY}`;
+    // videoDuration=medium (4-20 min) keeps results to individual songs
+    // instead of long compilation/jukebox-style videos.
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${query}&type=video&videoEmbeddable=true&videoDuration=medium&key=${YT_API_KEY}`;
     
     try {
       const controller = new AbortController();
@@ -326,11 +427,14 @@
       clearTimeout(timeoutId);
       const data = await response.json();
       if (data.items && data.items.length > 0) {
-        playlists[index].songs = data.items.map(item => ({
+        let mapped = data.items.map(item => ({
           title: item.snippet.title.replace(/(&quot;|&#39;|&amp;)/g, ''),
           artist: item.snippet.channelTitle,
           ytid: item.id.videoId
         }));
+        // Filter out compilations/mixes/jukeboxes so individual songs play.
+        const filtered = mapped.filter(s => !/jukebox|nonstop|mix\b|full album|hours?\b|playlist|medley/i.test(s.title));
+        playlists[index].songs = filtered.length > 0 ? filtered : mapped;
       } else if (data.error) {
         // TEMP DEBUG: surface the real API error on-screen so it's visible
         // without opening dev tools. Remove this branch once fixed.
@@ -373,7 +477,9 @@
   async function onPlayerReady(event) {
       buildCarousel();
       updateBackground();
+      ytPlayer.setVolume(Number(volumeSlider.value));
       await fetchSongsForMood(plIndex);
+      songIndex = pickRandomIndex(playlists[plIndex].songs.length);
       loadSong(false);
   }
 
@@ -481,10 +587,11 @@
     trackPos += dir;
     setTrack(true);
     plIndex = (plIndex + dir + N) % N;
-    songIndex = 0;
     updateBackground();
     updateDots();
     await fetchSongsForMood(plIndex);
+    // Random song within the new mood, instead of always starting at 0.
+    songIndex = pickRandomIndex(playlists[plIndex].songs.length);
     loadSong(isPlaying);
   }
 
@@ -512,11 +619,12 @@
     
     loadingOverlay.classList.remove('hidden');
     await fetchSongsForMood(plIndex);
-    // FIX: reset songIndex (it could be out of range for the new mood's
-    // playlist length) and route through loadSong() so the title/artist/
-    // disc label actually update to match what's playing, instead of
-    // calling ytPlayer.loadVideoById() directly and leaving the UI stale.
-    songIndex = 0;
+    // FIX: pick a random song (it could be out of range for the new mood's
+    // playlist length, and we want variety on every visit/refresh) and route
+    // through loadSong() so the title/artist/disc label actually update to
+    // match what's playing, instead of calling ytPlayer.loadVideoById()
+    // directly and leaving the UI stale.
+    songIndex = pickRandomIndex(playlists[plIndex].songs.length);
     loadSong(true);
 
     // FIX: watchdog. If we're still stuck on the loading overlay after
@@ -583,6 +691,8 @@
 
   let startX=0, startY=0, tracking=false;
   const THRESH = 46;
+  const TAP_MAX_MOVE = 10;
+  const DOUBLE_TAP_WINDOW = 320; // ms
 
   document.getElementById('app').addEventListener('pointerdown', e=>{
     startX = e.clientX; startY = e.clientY; tracking = true;
@@ -592,7 +702,24 @@
     tracking = false;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    if(Math.abs(dx) < 10 && Math.abs(dy) < 10) return; 
+
+    // Ignore taps/drags that start on interactive controls — let their own
+    // click/input handlers do the work, and don't trigger double-tap or
+    // swipe navigation from them.
+    const isInteractive = e.target.closest('button, input, .volume-wrap, .progress-bar, #adminTrigger, .live-badge');
+    if(isInteractive) return;
+
+    if(Math.abs(dx) < TAP_MAX_MOVE && Math.abs(dy) < TAP_MAX_MOVE){
+      // Plain tap on the player area: check for a double-tap to play/pause.
+      const now = Date.now();
+      if(now - lastTapTime < DOUBLE_TAP_WINDOW){
+        lastTapTime = 0;
+        togglePlay();
+      } else {
+        lastTapTime = now;
+      }
+      return;
+    }
 
     if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > THRESH){
       await changePlaylist(dx < 0 ? 1 : -1);
