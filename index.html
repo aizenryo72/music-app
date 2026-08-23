@@ -320,7 +320,10 @@
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${query}&type=video&videoEmbeddable=true&key=${YT_API_KEY}`;
     
     try {
-      const response = await fetch(url);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
       const data = await response.json();
       if (data.items && data.items.length > 0) {
         playlists[index].songs = data.items.map(item => ({
@@ -342,10 +345,12 @@
         ];
       }
     } catch (e) {
-      // TEMP DEBUG: show the fetch/network error itself. Remove once fixed.
+      // TEMP DEBUG: show the fetch/network error itself, including timeouts.
+      // Remove once fixed.
+      const isAbort = e && e.name === 'AbortError';
       console.error('Fetch failed:', e);
       playlists[index].songs = [
-        { title: 'NETWORK ERROR', artist: String(e).slice(0,120), ytid: 'jfKfPfyJRdk' }
+        { title: isAbort ? 'REQUEST TIMED OUT' : 'NETWORK ERROR', artist: isAbort ? 'No response after 8s' : String(e).slice(0,120), ytid: 'jfKfPfyJRdk' }
       ];
     }
     loadingOverlay.classList.add('hidden');
@@ -374,6 +379,7 @@
 
   function onPlayerStateChange(event) {
       if (event.data === YT.PlayerState.PLAYING) {
+          clearTimeout(window.__stallTimer);
           loadingOverlay.classList.add('hidden');
           setPlaying(true);
           startProgressBar();
@@ -485,7 +491,16 @@
   async function unlockAndPlay(){
     hasInteracted = true;
     tapOverlay.classList.add('hidden');
-    
+
+    // FIX: try to start the currently-cued song immediately, synchronously
+    // tied to this click, BEFORE any await. Browsers can silently block
+    // autoplay once an await breaks the direct user-gesture chain, which
+    // left the loading spinner stuck forever with no error shown.
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+        loadingOverlay.classList.remove('hidden');
+        try { ytPlayer.playVideo(); } catch (e) { console.warn('playVideo failed:', e); }
+    }
+
     const correctMood = autoSelectMoodIndex();
     if(plIndex !== correctMood) {
         plIndex = correctMood;
@@ -503,6 +518,18 @@
     // calling ytPlayer.loadVideoById() directly and leaving the UI stale.
     songIndex = 0;
     loadSong(true);
+
+    // FIX: watchdog. If we're still stuck on the loading overlay after
+    // 12 seconds (video never reached PLAYING), don't spin forever —
+    // surface it and try the next song automatically.
+    clearTimeout(window.__stallTimer);
+    window.__stallTimer = setTimeout(() => {
+        if (!loadingOverlay.classList.contains('hidden') && !isPlaying) {
+            console.warn('Playback stalled — skipping to next song.');
+            songTitle.textContent = 'PLAYBACK STALLED — skipping';
+            nextSong();
+        }
+    }, 12000);
   }
 
   function startProgressBar() {
